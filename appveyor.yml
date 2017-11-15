@@ -25,8 +25,7 @@ install:
     - cmd: git clone https://github.com/VictorYudin/saturn.git
 
 build_script:
-    - cmd: make -C saturn jom -j4
-    - cmd: tar cfJ jom.tar.zx -C saturn/lib jom
+    - cmd: make -C saturn jom-archive -j4
 
 artifacts:
     - path: saturn/*.tar.xz
@@ -36,7 +35,3 @@ artifacts:
 deploy:
     - provider: Environment
       name: GitHub Release
-
-on_finish:
-    - cmd: echo on_finish
-    - cmd: tree
