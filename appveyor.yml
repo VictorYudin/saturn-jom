@@ -30,7 +30,6 @@ build_script:
 artifacts:
     - path: saturn/*.tar.xz
       name: Package
-      type: zip
 
 deploy:
     - provider: Environment
