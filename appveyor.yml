@@ -1,0 +1,42 @@
+image: Previous Visual Studio 2017
+platform: x64
+configuration: Release
+
+# clone directory
+clone_folder: c:\projects\saturn
+
+install:
+    - cmd: set PATH=C:\Program Files\Git\cmd;C:\cygwin64\bin;C:\Program Files (x86)\CMake\bin;C:\Windows\System32;C:\Windows\System32\wbem
+
+    # GNU ed
+    - cmd: curl ftp://cygwin.osuosl.org/pub/cygwin/x86_64/release/ed/ed-1.14.1-1.tar.xz -o ed.tar.xz
+    - cmd: tar -xf ed.tar.xz
+
+    # unzip
+    - cmd: curl ftp://cygwin.osuosl.org/pub/cygwin/x86_64/release/unzip/unzip-6.0-17.tar.xz -o unzip.tar.xz
+    - cmd: tar -xf unzip.tar.xz
+
+    # Put them to PATH
+    - cmd: set PATH=%PATH%;C:\projects\saturn\usr\bin
+
+    # MSVC environment
+    - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"'
+
+    - cmd: git clone https://github.com/VictorYudin/saturn.git
+
+build_script:
+    - cmd: make -C saturn jom -j4
+    - cmd: tar cfJ jom.tar.zx -C saturn/lib jom
+
+artifacts:
+    - path: saturn/*.tar.xz
+      name: Package
+      type: zip
+
+deploy:
+    - provider: Environment
+      name: GitHub Release
+
+on_finish:
+    - cmd: echo on_finish
+    - cmd: tree
